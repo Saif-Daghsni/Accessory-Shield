@@ -1,0 +1,4 @@
+../Core/Src/potentiometer.c:3:6:POT_Init	1
+../Core/Src/potentiometer.c:9:10:POT_ReadRaw	1
+../Core/Src/potentiometer.c:21:9:POT_ReadPercent	1
+../Core/Src/potentiometer.c:26:10:POT_MapToRange	1

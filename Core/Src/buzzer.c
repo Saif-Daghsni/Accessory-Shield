@@ -5,7 +5,7 @@
 void Buzzer_Init(void) {
     // Start PWM with 0% duty cycle (silent)
     __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 0);
-    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 }
 
 void Buzzer_Play(uint32_t frequency, uint8_t duty_cycle) {
@@ -20,15 +20,15 @@ void Buzzer_Play(uint32_t frequency, uint8_t duty_cycle) {
 
     // Update timer registers
     __HAL_TIM_SET_AUTORELOAD(&htim3, arr);
-    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, ((arr + 1) * duty_cycle) / 100);
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, ((arr + 1) * duty_cycle) / 100);
 
     // Force update event to reload ARR immediately
     HAL_TIM_GenerateEvent(&htim3, TIM_EVENTSOURCE_UPDATE);
 
     // Ensure PWM is running
-    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 }
 
 void Buzzer_Stop(void) {
-    HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
 }

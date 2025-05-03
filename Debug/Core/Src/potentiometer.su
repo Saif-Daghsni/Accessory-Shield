@@ -1,0 +1,4 @@
+../Core/Src/potentiometer.c:3:6:POT_Init	24	static
+../Core/Src/potentiometer.c:9:10:POT_ReadRaw	32	static
+../Core/Src/potentiometer.c:21:9:POT_ReadPercent	24	static
+../Core/Src/potentiometer.c:26:10:POT_MapToRange	32	static
