@@ -1,3 +1,4 @@
+"./Core/Src/adxl345.o"
 "./Core/Src/buzzer.o"
 "./Core/Src/ds3231.o"
 "./Core/Src/fonts.o"

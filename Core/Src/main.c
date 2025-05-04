@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+//saif saif
 #include "buzzer.h"
 #include "ssd1306.h"
 #include "ssd1306_fonts.h"
@@ -32,6 +33,7 @@
 #include "lm75.h"
 #include "potentiometer.h"
 #include "ds3231.h"
+#include "adxl345.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -60,7 +62,8 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 Potentiometer pot;
-char uart_buf[100];
+char uart_buf[100] , char1[100];
+int16_t x, y, z;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -113,13 +116,15 @@ int main(void)
   MX_ADC1_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  ssd1306_Init();
+ // ssd1306_Init();
   LM75_Init(&hi2c1);
   POT_Init(&pot, &hadc1, ADC_CHANNEL_0);
   DS3231_SetTime(0, 0, 0, 1, 3, 5, 25);
 
+  ADXL345_Init();
+
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
-  HAL_Delay(2000);
+  HAL_Delay(500);
 
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
 
@@ -138,26 +143,36 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
 	  float tempC = LM75_ReadTemperature(&hi2c1);
 
 	  uint8_t percent = POT_ReadPercent(&pot);
 
 	  DS3231_Time now = DS3231_GetTime();
 
-	  sprintf(uart_buf,"Potentiometer: %d%% \t Temp: %.2f C \t Time: %02d:%02d:%02d  Date: %02d/%02d/20%02d\r\n",
-			  percent, tempC , now.hour, now.minute, now.second,now.date, now.month, now.year);
+	  if (ADXL345_ReadXYZ(&x, &y, &z) == HAL_OK)
+	          {
+	              // Successfully read X, Y, Z axis data
+	              // For example, output data over UART, or use it in calculations
+		  sprintf(uart_buf,"Potentiometer: %d%% \t Temp: %.2f C  Time: %02d:%02d:%02d  Date: %02d/%02d/20%02d  X: %d, Y: %d, Z: %d\r\n",
+				  percent, tempC , now.hour, now.minute, now.second,now.date, now.month, now.year,x, y, z);
+	          }
+	                  else
+	                  {
+	                	  sprintf(uart_buf,"Failed to read accelerometer data\r\n");
+	                  }
 	  // Send over UART
 	  HAL_UART_Transmit(&huart2, (uint8_t*)uart_buf, strlen(uart_buf), HAL_MAX_DELAY);
 	  //ssd1306_TestAll();
 
 	  // For example, play a tone with a frequency of 2kHz and 50% duty cycle
-	          Buzzer_Play(2000, 50);
+	          //Buzzer_Play(2000, 50);
 
-	          HAL_Delay(1000);  // Play tone for 1 second
+	          //HAL_Delay(1000);  // Play tone for 1 second
 
 	          // Stop the buzzer
-	          Buzzer_Stop();
-	  HAL_Delay(3000);
+	         // Buzzer_Stop();
+	  HAL_Delay(2000);
   }
   /* USER CODE END 3 */
 }

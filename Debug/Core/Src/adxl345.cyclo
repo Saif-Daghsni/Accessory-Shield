@@ -1,0 +1,4 @@
+../Core/Src/adxl345.c:6:26:ADXL345_WriteRegister	1
+../Core/Src/adxl345.c:12:26:ADXL345_ReadRegister	1
+../Core/Src/adxl345.c:18:19:ADXL345_Init	3
+../Core/Src/adxl345.c:36:19:ADXL345_ReadXYZ	2
